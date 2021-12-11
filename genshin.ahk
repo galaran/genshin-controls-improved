@@ -17,9 +17,12 @@ return
 ; Context-sensitive bindings (only in Genshin Impact)
 #If WinActive("ahk_class UnityWndClass") and WinActive("Genshin Impact")
 
+XButton2::w
+
 NumpadMult::spamAttack()
 NumpadDiv::selectAndUseTeleportOnMap()
 
+Numpad3::toggleArtifactLock()
 Numpad4::switchGroup(-1)
 Numpad5::switchGroup(1)
 Numpad6::switchGroup(2)
@@ -51,6 +54,19 @@ selectAndUseTeleportOnMap() {
 }
 
 ; =====================================================================
+
+toggleArtifactLock() {
+    MouseGetPos, x, y
+    
+    MouseClick, left, 3555, 375   ; Lock/Unlock artifact button [artifact name fits to 1 line]
+    Sleep, 200
+    MouseClick, left, 3555, 455   ; Lock/Unlock artifact button [artifact name fits to 2 lines]
+    Sleep, 200
+    MouseClick, left, 3555, 535   ; Lock/Unlock artifact button [artifact name fits to 3 lines]
+    Sleep, 200
+    
+    MouseMove, %x%, %y%
+}
 
 switchGroup(shiftValue) {
     Send, {SC026}   ; L key

@@ -10,7 +10,6 @@ SetTitleMatchMode, 3   ; A window's title must exactly match WinTitle to be a ma
 ; =====================================================================
 ; Auto-execute section
 
-autoRun := false
 initExpeditions()
 
 return
@@ -19,11 +18,7 @@ return
 #If WinActive("ahk_class UnityWndClass") and WinActive("Genshin Impact")
 
 NumpadMult::spamAttack()
-WheelLeft::mineCrystal()
-XButton2::toggleAutoRun()
 NumpadDiv::selectAndUseTeleportOnMap()
-
-~SC021::spamFOnHold()   ; F key, layout independed
 
 Numpad4::switchGroup(-1)
 Numpad5::switchGroup(1)
@@ -49,41 +44,10 @@ spamAttack() {
     }
 }
 
-mineCrystal() {
-    Loop, 3 {
-        MouseClick, left
-        Sleep, 700
-    }
-}
-
-toggleAutoRun() {
-    global autoRun
-    if (autoRun) {
-        Send, {SC011 up}   ; W key
-    } else {
-        Send, {SC011 down}   ; W key
-    }
-    autoRun := !autoRun
-}
-
 selectAndUseTeleportOnMap() {
     MouseClick, left
     Sleep, 300
     MouseClick, left, 3361, 2007   ; Teleport button
-}
-
-; =====================================================================
-
-spamFOnHold() {
-    KeyWait, SC021, T0.5   ; waiting for release F key with 500 ms timeout
-    if (ErrorLevel == 0) {   ; timed out, its just short press
-        return
-    } else {   ; still pressed, spam it, until released
-        while (GetKeyState("SC021", "P")) {
-            Send, {SC021}   ; not triggers this hotkey again because of keyboard hook
-            Sleep, 250
-        }
-    }
 }
 
 ; =====================================================================

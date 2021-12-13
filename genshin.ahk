@@ -18,6 +18,8 @@ return
 #If WinActive("ahk_class UnityWndClass") and WinActive("Genshin Impact")
 
 XButton2::w
+WheelLeft::clickAtAndReturnCursorPosition(145, 1071)   ; Left arrow in menus
+WheelRight::clickAtAndReturnCursorPosition(3679, 1071)   ; Right arrow in menus
 
 NumpadMult::spamAttack()
 NumpadDiv::selectAndUseTeleportOnMap()
@@ -37,6 +39,15 @@ Numpad7::collectAndResendExpeditions()
 ; =====================================================================
 
 ^NumpadDot::Reload
+
+; =====================================================================
+
+clickAtAndReturnCursorPosition(clickX, clickY) {
+    MouseGetPos, currentX, currentY
+    MouseClick, left, clickX, clickY
+    Sleep, 150
+    MouseMove, %currentX%, %currentY%
+}
 
 ; =====================================================================
 

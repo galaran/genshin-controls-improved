@@ -22,7 +22,7 @@ WheelLeft::clickAtAndReturnCursorPosition(145, 1071)   ; Left arrow in menus
 WheelRight::clickAtAndReturnCursorPosition(3679, 1071)   ; Right arrow in menus
 
 NumpadMult::spamAttack()
-NumpadDiv::selectAndUseTeleportOnMap()
+NumpadSub::selectAndUseTeleportOnMap()
 
 Numpad3::toggleArtifactLock()
 Numpad4::switchGroup(-1)

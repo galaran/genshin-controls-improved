@@ -31,7 +31,11 @@ Numpad6::switchGroup(2)
 Numpad8::bpCollectExp()
 Numpad9::bpCollectRewards()
 
-Numpad7::collectAndResendExpeditions()
+Numpad1::collectAndResendExpeditions()
+Numpad7::dailyKatheryne()
+
+F8::craftMaxCrystals()
+F9::buyMaxSeeds()
 
 !NumpadDot::exitGameAndScript()
 
@@ -183,11 +187,53 @@ clickExpeditionsActionButton() {
     MouseClick, left, 3466, 2032
 }
 
+
+
+dailyKatheryne() {
+    Send, {SC021}   ; F key
+    Sleep, 7000
+    
+    MouseClick, left, 2711, 1011   ; Rewards after 4 commissions
+    Sleep, 7000   ; Waiting for rewards overlay
+    MouseClick, left, 2957, 1011   ; Close rewards overlay
+    Sleep, 1000
+    
+    Send, {SC021}   ; F key
+    Sleep, 7000
+    
+    MouseClick, left, 2711, 1303   ; Expeditions
+    Sleep, 2000
+    
+    collectAndResendExpeditions()
+}
+
 ; =====================================================================
 
+craftMaxCrystals() {
+    Loop, 4 {
+        MouseClick, left, 2941, 1338   ; Max items
+        Sleep, 500
+        MouseClick, left, 3479, 2030   ; Craft
+        Sleep, 500
+    }
+}
 
+buyMaxSeeds() {
+    MouseGetPos, x, y
+    
+    MouseClick, left, 3538, 2036   ; Buy
+    Sleep, 500
+    MouseClick, left, 2354, 1246   ; Max items
+    Sleep, 500
+    MouseClick, left, 2322, 1510   ; Do buy
+    Sleep, 1000
+    MouseClick, left, 2516, 1054   ; Close overlay
+    
+    Sleep, 200
+    MouseMove, %x%, %y%
+}
 
-
+; =====================================================================
 
 
 

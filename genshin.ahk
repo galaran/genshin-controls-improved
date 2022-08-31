@@ -147,7 +147,7 @@ initExpeditions() {
     global mondstadtMeat := { mapIndex: 0, x: 2226, y: 896 }
     
     global liyueOres := { mapIndex: 1, x: 1916, y: 890 }
-    global liyueFoods1 := { mapIndex: 1, x: 1618, y: 1110 }
+    global liyueMora1 := { mapIndex: 1, x: 1618, y: 1110 }
 }
 
 collectAndResendExpeditions() {
@@ -158,7 +158,7 @@ collectAndResendExpeditions() {
     collectAndSendExpedition(mondstadtMeat, 2)
     
     collectAndSendExpedition(liyueOres, 0)
-    collectAndSendExpedition(liyueFoods1, 1)
+    collectAndSendExpedition(liyueMora1, 1)
     
     Send, {Esc}
 }
@@ -189,22 +189,34 @@ clickExpeditionsActionButton() {
 
 
 
+; Assuming that "Auto-Play Story" setting set to "Off"
 dailyKatheryne() {
-    Send, {SC021}   ; F key
-    Sleep, 7000
+    talkWithKatheryne()
     
     MouseClick, left, 2711, 1011   ; Rewards after 4 commissions
-    Sleep, 7000   ; Waiting for rewards overlay
+    Sleep, 1500
+    Send, {SC021}   ; F key - Skip "Thank you for completing today's commissions. Here is your reward" (1)
+    Sleep, 500
+    Send, {SC021}   ; F key - Skip "Thank you for completing today's commissions. Here is your reward" (2)
+    Sleep, 3000   ; Waiting for rewards overlay
     MouseClick, left, 2957, 1011   ; Close rewards overlay
     Sleep, 1000
     
-    Send, {SC021}   ; F key
-    Sleep, 7000
+    talkWithKatheryne()
     
     MouseClick, left, 2711, 1303   ; Expeditions
     Sleep, 2000
     
     collectAndResendExpeditions()
+}
+
+talkWithKatheryne() {
+    Send, {SC021}   ; F key
+    Sleep, 1500
+    Send, {SC021}   ; F key - Skip "Ad astra abyssosque! Welcome to the Adventurers Guild" (1)
+    Sleep, 500
+    Send, {SC021}   ; F key - Skip "Ad astra abyssosque! Welcome to the Adventurers Guild" (2)
+    Sleep, 2000
 }
 
 ; =====================================================================

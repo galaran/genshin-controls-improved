@@ -10,6 +10,10 @@ SetTitleMatchMode, 3   ; A window's title must exactly match WinTitle to be a ma
 ; =====================================================================
 ; Auto-execute section
 
+; Only 16:9 resolutions supported for now
+; Common values: 1.0 for 1920x1080; 1.333333 for 2560x1440; 2.0 for 3840x2160
+global scaleFrom1080p := 1.333333
+
 initExpeditions()
 
 return
@@ -18,24 +22,24 @@ return
 #If WinActive("ahk_class UnityWndClass") and WinActive("Genshin Impact")
 
 XButton2::w
-WheelLeft::clickAtAndReturnCursorPosition(145, 1071)   ; Left arrow in menus
-WheelRight::clickAtAndReturnCursorPosition(3679, 1071)   ; Right arrow in menus
+WheelLeft::doAndReturnCursorPosition("clickLeftArrowInGUI")
+WheelRight::doAndReturnCursorPosition("clickRightArrowInGUI")
 
-NumpadMult::spamAttack()
-NumpadSub::selectAndUseTeleportOnMap()
+F13::spamAttack()
+F14::selectAndUseTeleportOnMap()
 
-Numpad3::toggleArtifactLock()
+Numpad0::doAndReturnCursorPosition("toggleArtifactLock")
+Numpad1::dailyKatheryne()
+^Numpad1::collectAndResendExpeditions()
+Numpad2::bpCollectExp()
+Numpad3::bpCollectRewards()
+
 Numpad4::switchGroup(-1)
 Numpad5::switchGroup(1)
 Numpad6::switchGroup(2)
-Numpad8::bpCollectExp()
-Numpad9::bpCollectRewards()
-
-Numpad1::collectAndResendExpeditions()
-Numpad7::dailyKatheryne()
 
 F8::craftMaxCrystals()
-F9::buyMaxSeeds()
+F9::doAndReturnCursorPosition("buyMaxSeeds")
 
 !NumpadDot::exitGameAndScript()
 
@@ -46,9 +50,17 @@ F9::buyMaxSeeds()
 
 ; =====================================================================
 
-clickAtAndReturnCursorPosition(clickX, clickY) {
+clickLeftArrowInGUI() {
+    MouseClick, left, 72 * scaleFrom1080p, 535 * scaleFrom1080p
+}
+
+clickRightArrowInGUI() {
+    MouseClick, left, 1839 * scaleFrom1080p, 535 * scaleFrom1080p
+}
+
+doAndReturnCursorPosition(functionName) {
     MouseGetPos, currentX, currentY
-    MouseClick, left, clickX, clickY
+    %functionName%()
     Sleep, 150
     MouseMove, %currentX%, %currentY%
 }
@@ -56,7 +68,7 @@ clickAtAndReturnCursorPosition(clickX, clickY) {
 ; =====================================================================
 
 spamAttack() {
-    while (GetKeyState("NumpadMult", "P")) {
+    while (GetKeyState("F13", "P")) {
         MouseClick, left
         Sleep, 150
     }
@@ -65,22 +77,17 @@ spamAttack() {
 selectAndUseTeleportOnMap() {
     MouseClick, left
     Sleep, 300
-    MouseClick, left, 3361, 2007   ; Teleport button
+    MouseClick, left, 1680 * scaleFrom1080p, 1003 * scaleFrom1080p   ; Teleport button
 }
 
 ; =====================================================================
 
 toggleArtifactLock() {
-    MouseGetPos, x, y
-    
-    MouseClick, left, 3555, 375   ; Lock/Unlock artifact button [artifact name fits to 1 line]
+    MouseClick, left, 1777 * scaleFrom1080p, 187 * scaleFrom1080p   ; Lock/Unlock artifact button [artifact name fits to 1 line]
     Sleep, 200
-    MouseClick, left, 3555, 455   ; Lock/Unlock artifact button [artifact name fits to 2 lines]
+    MouseClick, left, 1777 * scaleFrom1080p, 227 * scaleFrom1080p   ; Lock/Unlock artifact button [artifact name fits to 2 lines]
     Sleep, 200
-    MouseClick, left, 3555, 535   ; Lock/Unlock artifact button [artifact name fits to 3 lines]
-    Sleep, 200
-    
-    MouseMove, %x%, %y%
+    MouseClick, left, 1777 * scaleFrom1080p, 267 * scaleFrom1080p   ; Lock/Unlock artifact button [artifact name fits to 3 lines]
 }
 
 switchGroup(shiftValue) {
@@ -89,16 +96,16 @@ switchGroup(shiftValue) {
     
     while (shiftValue != 0) {
         if (shiftValue > 0) {
-            MouseClick, left, 3679, 1071   ; Right arrow - next group
+            clickRightArrowInGUI()
             shiftValue--
         } else {
-            MouseClick, left, 145, 1071   ; Left arrow - previous group
+            clickLeftArrowInGUI()
             shiftValue++
         }
         Sleep, 600
     }
     
-    MouseClick, left, 3381, 2039
+    MouseClick, left, 1690 * scaleFrom1080p, 1019 * scaleFrom1080p
     Sleep, 1000
     Send, {Esc}
 }
@@ -108,19 +115,23 @@ switchGroup(shiftValue) {
 bpCollectExp() {
     Send, {F4}
     Sleep, 1000
-    MouseClick, left, 3679, 1071   ; Right arrow - to BP exp screen
+    clickRightArrowInGUI()   ; To BP exp screen
     Sleep, 500
-    MouseClick, left, 3475, 1942   ; Collect all exp
+    clickCollectExpOrRewardsButton()
 }
 
 bpCollectRewards() {
-    MouseClick, left, 145, 1071   ; Left arrow - to BP rewards screen
+    clickLeftArrowInGUI()   ; To BP rewards screen
     Sleep, 500
-    MouseClick, left, 3475, 1942   ; Collect all rewards
+    clickCollectExpOrRewardsButton()
     Sleep, 2000
     Send, {Esc}
     Sleep, 500
     Send, {Esc}
+}
+
+clickCollectExpOrRewardsButton() {
+    MouseClick, left, 1737 * scaleFrom1080p, 971 * scaleFrom1080p   ; Collect all exp
 }
 
 ; =====================================================================
@@ -128,13 +139,13 @@ bpCollectRewards() {
 exitGameAndScript() {
     Send, {Esc}
     Sleep, 2000
-    MouseClick, left, 83, 2047   ; Exit game in menu
+    MouseClick, left, 41 * scaleFrom1080p, 1023 * scaleFrom1080p   ; Exit game in menu
     Sleep, 1000
-    MouseClick, left, 2326, 1509   ; Confirm
+    MouseClick, left, 1163 * scaleFrom1080p, 754 * scaleFrom1080p   ; Confirm
     Sleep, 8000   ; Waiting for login menu
-    MouseClick, left, 186, 1963   ; Exit button
+    MouseClick, left, 93 * scaleFrom1080p, 981 * scaleFrom1080p   ; Exit button
     Sleep, 1000
-    MouseClick, left, 2132, 1131   ; OK button
+    MouseClick, left, 1066 * scaleFrom1080p, 565 * scaleFrom1080p   ; OK button
     Sleep, 1000
     ExitApp
 }
@@ -142,12 +153,12 @@ exitGameAndScript() {
 ; =====================================================================
 
 initExpeditions() {
-    global mondstadtOres1 := { mapIndex: 0, x: 2096, y: 664 }
-    global mondstadtOres2 := { mapIndex: 0, x: 2336, y: 1310 }
-    global mondstadtMeat := { mapIndex: 0, x: 2226, y: 896 }
+    global mondstadtOres1 := { mapIndex: 0, x: 1048, y: 332 }
+    global mondstadtOres2 := { mapIndex: 0, x: 1168, y: 655 }
+    global mondstadtMeat := { mapIndex: 0, x: 1113, y: 448 }
     
-    global liyueOres := { mapIndex: 1, x: 1916, y: 890 }
-    global liyueMora1 := { mapIndex: 1, x: 1618, y: 1110 }
+    global liyueOres := { mapIndex: 1, x: 958, y: 445 }
+    global liyueMora1 := { mapIndex: 1, x: 809, y: 555 }
 }
 
 collectAndResendExpeditions() {
@@ -164,11 +175,11 @@ collectAndResendExpeditions() {
 }
 
 collectAndSendExpedition(expedition, characterIndex) {
-    mapY := 318 + 145 * expedition["mapIndex"]
-    MouseClick, left, 150, mapY   ; Select map
+    mapY := (159 + 72 * expedition["mapIndex"]) * scaleFrom1080p
+    MouseClick, left, 75 * scaleFrom1080p, mapY   ; Select map
     Sleep, 200
     
-    MouseClick, left, expedition["x"], expedition["y"]   ; Select expedition
+    MouseClick, left, expedition["x"] * scaleFrom1080p, expedition["y"] * scaleFrom1080p   ; Select expedition
     Sleep, 300
     
     clickExpeditionsActionButton()   ; Take reward
@@ -178,13 +189,13 @@ collectAndSendExpedition(expedition, characterIndex) {
     clickExpeditionsActionButton()   ; Select character button
     Sleep, 1200
     
-    characterY := 335 + 250 * characterIndex
-    MouseClick, left, 500, characterY
+    characterY := (167 + 125 * characterIndex) * scaleFrom1080p
+    MouseClick, left, 250 * scaleFrom1080p, characterY
     Sleep, 500
 }
 
 clickExpeditionsActionButton() {
-    MouseClick, left, 3466, 2032
+    MouseClick, left, 1733 * scaleFrom1080p, 1016 * scaleFrom1080p
 }
 
 
@@ -193,18 +204,18 @@ clickExpeditionsActionButton() {
 dailyKatheryne() {
     talkWithKatheryne()
     
-    MouseClick, left, 2711, 1011   ; Rewards after 4 commissions
+    MouseClick, left, 1355 * scaleFrom1080p, 505 * scaleFrom1080p   ; Rewards after 4 commissions
     Sleep, 1500
     Send, {SC021}   ; F key - Skip "Thank you for completing today's commissions. Here is your reward" (1)
     Sleep, 500
     Send, {SC021}   ; F key - Skip "Thank you for completing today's commissions. Here is your reward" (2)
     Sleep, 3000   ; Waiting for rewards overlay
-    MouseClick, left, 2957, 1011   ; Close rewards overlay
+    MouseClick, left, 1478 * scaleFrom1080p, 505 * scaleFrom1080p   ; Close rewards overlay
     Sleep, 1000
     
     talkWithKatheryne()
     
-    MouseClick, left, 2711, 1303   ; Expeditions
+    MouseClick, left, 1355 * scaleFrom1080p, 651 * scaleFrom1080p   ; Expeditions
     Sleep, 2000
     
     collectAndResendExpeditions()
@@ -223,30 +234,24 @@ talkWithKatheryne() {
 
 craftMaxCrystals() {
     Loop, 4 {
-        MouseClick, left, 2941, 1338   ; Max items
+        MouseClick, left, 1470 * scaleFrom1080p, 669 * scaleFrom1080p   ; Max items
         Sleep, 500
-        MouseClick, left, 3479, 2030   ; Craft
+        MouseClick, left, 1739 * scaleFrom1080p, 1015 * scaleFrom1080p   ; Craft
         Sleep, 500
     }
 }
 
 buyMaxSeeds() {
-    MouseGetPos, x, y
-    
-    MouseClick, left, 3538, 2036   ; Buy
+    MouseClick, left, 1769 * scaleFrom1080p, 1018 * scaleFrom1080p   ; Buy
     Sleep, 500
-    MouseClick, left, 2354, 1246   ; Max items
+    MouseClick, left, 1177 * scaleFrom1080p, 623 * scaleFrom1080p   ; Max items
     Sleep, 500
-    MouseClick, left, 2322, 1510   ; Do buy
+    MouseClick, left, 1161 * scaleFrom1080p, 755 * scaleFrom1080p   ; Do buy
     Sleep, 1000
-    MouseClick, left, 2516, 1054   ; Close overlay
-    
-    Sleep, 200
-    MouseMove, %x%, %y%
+    MouseClick, left, 1258 * scaleFrom1080p, 527 * scaleFrom1080p   ; Close overlay
 }
 
 ; =====================================================================
-
 
 
 

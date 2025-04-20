@@ -41,11 +41,10 @@ Numpad6::switchGroup(2)
 F8::craftMaxCrystals()
 F9::doAndReturnCursorPosition("buyMaxSeeds")
 
-!NumpadDot::exitGameAndScript()
-
 #If
 ; =====================================================================
 
+!NumpadDot::ExitApp
 ^NumpadDot::Reload
 
 ; =====================================================================
@@ -132,22 +131,6 @@ bpCollectRewards() {
 
 clickCollectExpOrRewardsButton() {
     MouseClick, left, 1737 * scaleFrom1080p, 971 * scaleFrom1080p   ; Collect all exp
-}
-
-; =====================================================================
-
-exitGameAndScript() {
-    Send, {Esc}
-    Sleep, 2000
-    MouseClick, left, 41 * scaleFrom1080p, 1023 * scaleFrom1080p   ; Exit game in menu
-    Sleep, 1000
-    MouseClick, left, 1163 * scaleFrom1080p, 754 * scaleFrom1080p   ; Confirm
-    Sleep, 8000   ; Waiting for login menu
-    MouseClick, left, 93 * scaleFrom1080p, 981 * scaleFrom1080p   ; Exit button
-    Sleep, 1000
-    MouseClick, left, 1066 * scaleFrom1080p, 565 * scaleFrom1080p   ; OK button
-    Sleep, 1000
-    ExitApp
 }
 
 ; =====================================================================
